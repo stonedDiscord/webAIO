@@ -70,6 +70,7 @@ window.setServ = setServ;
 
 function onOpen(_e) {
 	console.log(`Your emulated HDID is ${hdid}`);
+	masterserver.send("NEWS#%");
 }
 
 /**
@@ -83,11 +84,12 @@ function onError(evt) {
 
 function onMessage(e) {
 	const msg = e.data;
+	const args = msg.split("#").slice(1);
 	const header = msg.split("#", 2)[0];
 	console.debug(msg);
 
 	if (header === "12") {
-		const args = msg.split("#").slice(1);
+		
 		const i = 1;
 
 			document.getElementById("masterlist").innerHTML +=
@@ -97,13 +99,13 @@ function onMessage(e) {
 	}
 	else if (header === "1") {
 		masterserver.send("12#%");
+		masterserver.send("12#%");
 	}
 	else if (header === "NEWS") {
 		const msChat = document.getElementById("masterchat");
-		msChat.innerHTML += unescapeChat(msg[1]);
+		msChat.innerHTML = args[0];
 		if (msChat.scrollTop > msChat.scrollHeight - 600) {
 			msChat.scrollTop = msChat.scrollHeight;
 		}
-		masterserver.close();
 	}
 }
