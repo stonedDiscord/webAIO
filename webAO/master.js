@@ -30,9 +30,6 @@ if (window.requestIdleCallback) {
 			masterserver.onopen = (evt) => onOpen(evt);
 			masterserver.onerror = (evt) => onError(evt);
 			masterserver.onmessage = (evt) => onMessage(evt);
-
-			// i don't need the ms to play alone
-			setTimeout(() => checkOnline(-1, "127.0.0.1:50001"), 0);
 		});
 	});
 } else {
@@ -50,9 +47,6 @@ if (window.requestIdleCallback) {
 			masterserver.onopen = (evt) => onOpen(evt);
 			masterserver.onerror = (evt) => onError(evt);
 			masterserver.onmessage = (evt) => onMessage(evt);
-
-			// i don't need the ms to play alone
-			setTimeout(() => checkOnline(-1, "127.0.0.1:50001"), 0);
 		});
 	}, 500);
 }
@@ -87,82 +81,19 @@ function onError(evt) {
 	document.getElementById("ms_error_code").innerText = `A network error occurred: ${evt.reason} (${evt.code})`;
 }
 
-<<<<<<< Updated upstream
-function checkOnline(serverID, coIP) {
-	let oserv = new WebSocket("ws://" + coIP);
-
-	// define what the callbacks do
-	function onCOOpen(_e) {
-		document.getElementById(`server${serverID}`).className = "available";
-		oserv.send(`HI#${hdid}#%`);
-		oserv.send(`ID#webAO#webAO#%`);
-	}
-
-	function onCOMessage(e) {
-		const comsg = e.data;
-		const coheader = comsg.split("#", 2)[0];
-		const coarguments = comsg.split("#").slice(1);
-		if (coheader === "PN") {
-			online_counter[serverID] = `Online: ${coarguments[0]}/${coarguments[1]}`;
-			oserv.close();
-		}
-		else if (coheader === "BD") {
-			online_counter[serverID] = "Banned";
-			server_description[serverID] = coarguments[0];
-			oserv.close();
-		}
-	}
-
-	// assign the callbacks
-	oserv.onopen = function (evt) {
-		onCOOpen(evt);
-	};
-
-	oserv.onmessage = function (evt) {
-		onCOMessage(evt);
-	};
-
-	oserv.onerror = function (_evt) {
-		console.warn(coIP + " threw an error.");
-	};
-
-}
-
-=======
->>>>>>> Stashed changes
 function onMessage(e) {
 	const msg = e.data;
 	const header = msg.split("#", 2)[0];
 	console.debug(msg);
 
-<<<<<<< Updated upstream
-	if (header === "ALL") {
-		const servers = msg.split("#").slice(1);
-		for (let i = 0; i < servers.length - 1; i++) {
-			const serverEntry = servers[i];
-			const args = serverEntry.split("&");
-			const ipport = args[2] + ":" + args[3];
-			const asset = args[4] ? `&asset=${args[4]}` : "";
-			const liclass = lowMemory ? "" : "unavailable"; // don't hide the entries if we're not checking them
-
-			document.getElementById("masterlist").innerHTML +=
-				`<li id="server${i}" class="${liclass}" onmouseover="setServ(${i})"><p>${args[0]}</p>`
-				+ `<a class="button" href="client.html?mode=watch&ip=${ipport}${asset}">Watch</a>`
-				+ `<a class="button" href="client.html?mode=join&ip=${ipport}${asset}">Join</a></li>`;
-			server_description[i] = args[1];
-			if (!lowMemory)
-				setTimeout(() => checkOnline(i, ipport), 0);
-		}
-		masterserver.close();
-=======
 	if (header === "12") {
 		const args = msg.split("#").slice(1);
+		const i = 1;
 
 			document.getElementById("masterlist").innerHTML +=
-				`<li id="server${i}" class="${liclass}" onmouseover="setServ(${i})"><p>${args[0]}</p>`
+				`<li id="server${i}" class="available" onmouseover="setServ(${i})"><p>${args[0]}</p>`
 				+ `<a class="button" href="client.html?mode=join&ip=${args[2]}:${args[3]}">Join</a></li>`;
 			server_description[i] = args[1];
->>>>>>> Stashed changes
 	}
 	else if (header === "1") {
 		masterserver.send("12#%");
