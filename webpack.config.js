@@ -4,12 +4,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        ui: './webAO/ui.js',
-        client: './webAO/client.js',
-        master: './webAO/master.js'
+        ui: './webAIO/ui.js',
+        client: './webAIO/client.js',
+        master: './webAIO/master.js'
     },
     output: {
-        path: path.resolve(__dirname, 'webAO'),
+        path: path.resolve(__dirname, 'webAIO'),
         filename: '[name].b.js'
     },
     module: {
